@@ -1,0 +1,82 @@
+
+body {
+  background-image: url("https://thred.com/wp-content/uploads/2022/03/decentraland-main.jpg");
+}
+
+.centered {
+    padding-top: 200px;
+    text-align: center;
+}
+
+.secret-text {
+  text-align: center;
+  font-size: 2rem;
+  color: #fff;
+  background-color: #000;
+}
+
+.card {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.matrixOfLands {
+  border: 1px;
+ 
+}
+
+.rowOfLands {
+  display: flex;
+  margin: auto;
+  width: 75%;
+}
+
+.colOfLands {
+  display: flex;
+  margin: auto;
+  width: 75%;
+  flex-direction: column;
+}
+
+.land {
+  width: 15px;
+  height: 15px;
+  background-color: white;
+  margin: 1px;
+}
+
+.park{
+  color: green;
+}
+.road{
+  color: black;
+}
+.nftsale{
+  color: gray;
+}
+.nftnotsale{
+  color: red;
+}
+.mynft{
+  color: yellow;
+}
+
+.park-land{
+  background-color: green;
+}
+.road-land{
+  background-color: black;
+}
+.nftsale-land{
+  background-color: gray;
+}
+.nftnotsale-land{
+  background-color: red;
+}
+.mynft-land{
+  background-color: yellow;
+}
+.footer {
+  color: #fff;
+  text-align: center;
+  margin: 1px;
+}
