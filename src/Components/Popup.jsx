@@ -26,7 +26,10 @@ function Popup(props){
         // buyBTN.style.visibility = "visible";
 
         //take new data from inputs
-         updateLandInDB();
+        if (newCost !== -1 && newGame !== ""){
+          updateLandInDB();
+        }
+
         // const newIsForSale = document.getElementById("isForSaleInput")
         
         
@@ -86,14 +89,14 @@ function Popup(props){
                         <dd class="col-sm-9">{props.land.type}</dd>
 
                       <dt class="col-sm-3">Cost:</dt>
-                        <dd class="col-sm-9">{isUpdatePressed ? <input onChange={updateCost} id="costInput"></input> : props.land.cost}</dd>
+                        <dd class="col-sm-9">{isUpdatePressed ? <input onChange={updateCost} id="costInput" ></input> : props.land.cost}</dd>
 
                       <dt class="col-sm-3">Game:</dt>
-                        <dd class="col-sm-9"> {isUpdatePressed ? <input onChange={updateGame} id="gameInput"></input> : props.land.game ? <a href={props.land.game}>Link to the Game</a>: "None"}</dd>
+                        <dd class="col-sm-9"> {isUpdatePressed ? <input onChange={updateGame} id="gameInput" ></input> : props.land.game ? <a href={props.land.game}>Link to the Game</a>: "None"}</dd>
                       <dt class="col-sm-3">ForSale:</dt>
                         <dd class="col-sm-9">
                             
-                            {isUpdatePressed ? <select id = "isForSaleInput" onChange={updateIsForSale} >  
+                            {isUpdatePressed ? <select id = "isForSaleInput" onChange={updateIsForSale}>  
                                                 <option> No </option>    
                                                 <option> Yes </option>    
                                                </select> : props.land.isForSale ? "Yes" : "No"}
