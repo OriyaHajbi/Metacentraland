@@ -1,6 +1,4 @@
 import React , {useState} from "react";
-import GoogleEntry from "../Components/GoogleEntry";
-import httpRequestBuilder from "../httpRequest";
 import { useNavigate } from "react-router-dom";
 const axios = require('axios').default;
 
@@ -78,7 +76,6 @@ function Register(){
       </div>
     </div>
 
-    <GoogleEntry text="Sign Up with Google"/>
     
 
   </div>

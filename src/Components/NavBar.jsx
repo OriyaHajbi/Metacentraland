@@ -4,14 +4,16 @@ import React from "react";
 
 function NavBar(props){
     return  <div>
-                <nav class="navbar  ">
-                    <span class="navbar-brand mb-0 h1">{props.userMail}</span>
-                    <span class="navbar-brand mb-0 h1 mynft">my NFT</span>
-                    <span class="navbar-brand mb-0 h1 park">Park</span>
-                    <span class="navbar-brand mb-0 h1 road">Road</span>
-                    <span class="navbar-brand mb-0 h1 nftsale">NFT-for sale</span>
-                    <span class="navbar-brand mb-0 h1 nftnotsale">NFT-not for sale</span>
-                    <span class="navbar-brand mb-0 h1">Coins: {props.userBalance} <i class="fab fa-btc"></i></span>
+                <nav class="navbar">
+                    <span class="navbar-brand h1 font-weight-bold font-italic">{props.userMail}</span>
+                    <span class="navbar-brand"></span>
+                    <span class="navbar-brand mynft">my NFT</span>
+                    <span class="navbar-brand park">Park</span>
+                    <span class="navbar-brand road">Road</span>
+                    <span class="navbar-brand nftsale">NFT-for sale</span>
+                    <span class="navbar-brand nftnotsale">NFT-not for sale</span>
+                    <span class="navbar-brand nftnotsale"></span>
+                    <span class="navbar-brand">Coins: {props.userBalance} <i class="fab fa-btc"></i></span>
                 </nav>
             </div>
 }
