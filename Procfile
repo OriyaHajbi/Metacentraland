@@ -1,4 +1,2 @@
-web: cd ./server/
-web: nodemon app.js
-web: cd ..
+web: cd ./server/ nodemon app.js
 web: npm start
