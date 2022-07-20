@@ -47,7 +47,7 @@ app.use(passport.session());
 
 
 mongoose.connect("mongodb+srv://OriyaHajbi:Oriya123@cluster0.yjydbsq.mongodb.net/Metacentraland" , {useNewUrlParser: true} );
-// mongoose.connect("mongodb://localhost:27017/Metacentraland" , {useNewUrlParser: true} );
+// mongoose.connect("mongodb://localhost:27017/Metacentraland" , {useNewUrlParser: true} ); //local
 const db = mongoose.connection;
 db.on("error" , (error) => console.log(error));
 db.once("open" , () => {
