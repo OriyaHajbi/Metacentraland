@@ -5,9 +5,12 @@ const axios = require('axios').default;
 
 function Register(){
 
+  const [checked, setChecked] = useState(false);  
+  const [ isSeller , setIsSeller] = useState(false);
   const [user , setUser] = useState({
     username: "",
-    password: ""
+    password: "",
+    isSeller: checked
   });
 
   function updateUser(event){
@@ -19,7 +22,8 @@ function Register(){
       ... prevValue,
       [name] : value
     }});
-     console.log(user);
+    //  console.log(user);
+    //  console.log(checked ? "true": "false");
   }
 
     const navigate = useNavigate();
@@ -35,22 +39,25 @@ function Register(){
   
     axios.post(URL, {
       username: user.username,
-      password: user.password
+      password: user.password,
+      isSeller: checked ? "true": "false"
     })
     .then((res) => {
       if (res.data){
         console.log(res);
         handleClick("/login");
-        setUser({username: "",password: ""});
+        setUser({username: "",password: "" , isSeller: false});
       }else{
         alert("The details are wrong");
         handleClick("/register");
-        setUser({username: "",password: ""});
+        setUser({username: "",password: "", isSeller: false});
       }
     });
   }
 
-
+  function updateIsSeller(event){
+    setIsSeller(event.target.value);
+  }
 
 
     return <div className="container mt-5 w-50">
@@ -70,7 +77,16 @@ function Register(){
               <label for="password">Password</label>
               <input onChange={updateUser} type="password" className="form-control" name="password" required/>
             </div>
+            <div>
+              <form>
+                <label>You are a Seller?</label>
+                <input type="checkbox" checked={checked}  onChange={e => { if (checked !== undefined)
+                setChecked(e.target.checked)}}   />
+              </form>
+            </div>
             <button onClick={sendUserData} className="btn btn-dark ">Register</button>
+            <a href="/" className="btn btn-outline-dark left ">Back</a>
+
           
         </div>
       </div>

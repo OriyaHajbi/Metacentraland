@@ -1,7 +1,5 @@
 const express = require("express");
-const { db } = require("../models/User");
 const router = express.Router();
-const mongoose = require("mongoose");
 const bcrypt = require("bcrypt")
 const saltRounds = 10;
 
@@ -10,14 +8,14 @@ const saltRounds = 10;
 const User = require("../models/User");
 
 
-//GETTING ALL USERS
-
-
-//GETTING ONE USER - get ID_USER return user
-
-
-//register user USER
-router.get("/register" ,async function(req , res){
+//get user
+router.get("/user" ,async function(req , res){
+   const username = req.query.username;
+   User.find({username: username} , function(err, foundUser){
+    if (foundUser){
+        res.send(foundUser);
+    }
+   })
 
 });
 
@@ -26,12 +24,22 @@ router.post("/register" ,async (req , res) =>{
     
     const username =req.body.username;
     const password = req.body.password;
-   
+    const isSeller = req.body.isSeller;
+    var balance =1000;
+
+    if (isSeller === "false")
+        balance = 0;
+
+    console.log(balance);
+
+    
 
      bcrypt.hash(password , saltRounds , function(err , hash){
         const newUser = new User({
             username: username,
-            password: hash
+            password: hash,
+            isSeller: isSeller,
+            balance: balance
         });
         console.log(newUser);
         

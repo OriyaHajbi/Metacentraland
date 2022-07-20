@@ -43,6 +43,7 @@ function Popup(props){
         game: newGame,
         isForSale: newIsForSale === "Yes"
       }
+      console.log(params);
       const URL = 'http://localhost:4000/lands/updateland';
       axios.patch(URL , params)
       .then((res) => {
@@ -65,11 +66,28 @@ function Popup(props){
     }
     
     function updateIsForSale(event){
+      //console.log(newIsForSale);
       setIsForSale(event.target.value)
     }
     
     function buyLand(){
+      const params = {
+        newOwnerId: props.userMail,
+        landCost: props.land.cost,
+        landId: props.land.id,
+        oldOwnerId: props.land.ownerId
+      }
+      const URL = 'http://localhost:4000/lands/buyland';
+      axios.patch(URL , params)
+      .then((res) => {
+        if (res.data){
+          alert("The land was successfully purchased")
+          window.location.reload();
 
+        }else{
+          alert("You didnt have enough Coins in your Wallet")
+        }
+      });
     }
 
     return  <div id="popUpWindow" className={"popUp popUpTexture popUp-active"}>
@@ -77,7 +95,7 @@ function Popup(props){
                     <button type="button" class="close"  onClick={closePopUp} >
                       <span aria-hidden="true">&times;</span>
                     </button>
-                    <h1><ins>Land detail:</ins></h1>
+                    <h1><ins>Land ({props.land.rowIndex} , {props.land.colIndex}) detail:</ins></h1>
                 </div>
                 <div className="bodyPopUp">
                     <dl class="row">
@@ -104,7 +122,7 @@ function Popup(props){
                     </dl>
                     
                     
-                    {props.land.isForSale ? 
+                    {(props.isSeller && props.land.isForSale) ? 
                     <button id="buyBTN"  type="button" class="btn btn-warning btn-lg center"   onClick={buyLand} >Buy </button>
                     : ""}
                     {props.userMail == props.land.ownerId ? 

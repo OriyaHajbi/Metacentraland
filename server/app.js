@@ -7,6 +7,9 @@ const mongoose = require("mongoose");
 const passport = require("passport");
 const cors = require("cors");
 
+const {Blockchain , Transaction} = require("../server/blockchain")
+const blockchain = new Blockchain();
+
 
 const User = require("../server/models/User");
 
@@ -16,7 +19,8 @@ const UserRoutes = require("../server/routers/User");
 const LandRoutes = require("../server/routers/Land");
 
 const Land = require("../server/models/Land");
-
+const bcrypt = require("bcrypt")
+const saltRounds = 10;
 
 const app = express();
 app.use(cors());
@@ -47,9 +51,25 @@ const db = mongoose.connection;
 db.on("error" , (error) => console.log(error));
 db.once("open" , () => {
   console.log("Connect to DB");
+  User.find({} , async function(err , foundUser){
+    if(foundUser.length === 0){
+
+        bcrypt.hash("manager" , saltRounds , function(err , hash){
+          const manager = new User({
+              username: "O&N.Ltd",
+              password: hash,
+              balance: 0
+          });
+
+          manager.save();
+
+        }
+      )
+    }
+  })
   Land.find({} , async function(err , foundLand){
     if (foundLand.length === 0){
-       var size =50;
+      var size =50;
       for (var i=0; i< size ; i++){
         for(var j=0 ; j<size ; j++){
           const type = ((i>20 && i<30 && j>20 && j<30) || //big park
@@ -63,8 +83,10 @@ db.once("open" , () => {
            (i>40 && i<43 && j>9 && j<40) || // right road 
            (i == 25 && ( (j>8 && j<21) || (j>29 && j<41))) || //road up to down park
            (j == 25 && ( (i>8 && i<21) || (i>29 && i<41)))) ? "road" : "NFT";
+
           const cost = Math.floor(Math.random()*185)+15;
 
+          blockchain.addBlock();
           const land = new Land({
             ownerId: "O&N.Ltd",
             rowIndex: i,
@@ -72,7 +94,8 @@ db.once("open" , () => {
             type: type,
             cost: cost,
             game: "",
-            isForSale: type==="NFT"
+            isForSale: type==="NFT",
+            block: blockchain.getLatesBlock()
           })
           await land.save();
        }
@@ -86,9 +109,6 @@ app.use("/users" ,UserRoutes);
 app.use("/lands" ,LandRoutes);
 
 
-
-
-
 app.get("/" ,function(req, res){
     
 });
@@ -97,22 +117,6 @@ app.get("/auth/google" ,
     passport.authenticate("google" , {scope: ["profile"]})
 );
 
-// just to check
-// app.get("/auth/google" , function(req, res){
-//     console.log("here");
-// })
-
-// app.get("/auth/google/main", 
-//   passport.authenticate("google", { failureRedirect: '/login' }),
-//   function(req, res) {
-//     // Successful authentication, redirect main.
-//     console.log("goooooogle");
-//     res.redirect('/main');
-//   });
-
-// app.get("/login" ,function(req, res){
-//     res.render("login");
-// });
 
 app.get("/register" ,function(req, res){
     
@@ -133,64 +137,9 @@ app.get('/logout', function(req, res, next) {
 });
 
 
-// app.post("/register" , function(req , res){
-
-//     console.log("hahahahahahahahha");
-//     User.register({username: req.body.username} , req.body.password , function(err , user){
-//         if (err) {
-//             console.log("erririrri");
-//             console.log(err);
-//             res.redirect("/register");
-//         }else{
-                
-//             passport.authenticate("local")(req , res , function(){
-
-//                 res.redirect("/login");
-//             });
-//         }
-//     })
-// });
-
-// app.post("/login" , function(req , res){
-   
-//     const user = new User({
-//         username: req.body.username,
-//         password: req.body.password
-//     });
-
-//     req.login(user , function(err){
-//         if (err){
-//             console.log(err);
-//             res.redirect("/login");
-//         }else{
-//             passport.authenticate("local")(req , res , function(){
-//                 console.log("in post login");
-//                 res.redirect("/main");
-//             });
-//         }
-//     });
-
-
-// });
-
-// app.post("/api/google-login" , async (req , res) => {
-//     const {token} = req.body;
-//     const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
-//     const ticket = await client.verifyIdToken({
-//         idToken: token,
-//         audience: process.env.CLIENT_ID
-//     });
-//     const { name , email} = ticket.getPayload();
-//     res.json({name, email});
-// });
-
-
-
 app.get("/api", (req, res) => {
   res.json({ message: "Hello from server!" });
 });
-
-
 
 
 

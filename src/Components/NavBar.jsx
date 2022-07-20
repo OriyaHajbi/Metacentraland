@@ -14,6 +14,7 @@ function NavBar(props){
                     <span class="navbar-brand nftnotsale">NFT-not for sale</span>
                     <span class="navbar-brand nftnotsale"></span>
                     <span class="navbar-brand">Coins: {props.userBalance} <i class="fab fa-btc"></i></span>
+                    <a href="/"><i class="fa-solid fa-arrow-right-from-bracket"></i></a>
                 </nav>
             </div>
 }

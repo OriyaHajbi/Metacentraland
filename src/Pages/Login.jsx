@@ -92,6 +92,7 @@ function Login(){
               <input onChange={updateUser} type="password" className="form-control" name="password" required/>
             </div>
             <button onClick={sendUserData} className="btn btn-dark ">Login</button>
+            <a href="/" className="btn btn-outline-dark left ">Back</a>
           
 
         </div>

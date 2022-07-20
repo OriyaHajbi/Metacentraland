@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const landSchema = new mongoose.Schema({
   ownerId: {
     type: String,
-    default: "0",
+    default: "O&N.Ltd",
   },
   type: {
     type: String,
@@ -30,6 +30,9 @@ const landSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
+  block: {
+    type: Object
+  }
 });
 
 module.exports = mongoose.model("Land", landSchema);

@@ -17,6 +17,9 @@ const userSchema = new mongoose.Schema({
     type: Number,
     default: 1000,
   },
+  isSeller: {
+    type: Boolean
+  }
 });
 
 // userSchema.plugin(passportLocalMongoose);

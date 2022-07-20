@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import Footer from "../Components/Footer";
 import NavBar from "../Components/NavBar";
 import Popup from "../Components/Popup";
+import { mouseWheelZoom } from 'mouse-wheel-zoom';
 const axios = require('axios').default;
 const FormData = require('form-data');
 
@@ -10,6 +11,11 @@ function Main(){
     const userMail = localStorage.getItem("userMail").substring(1,localStorage.getItem("userMail").length-1);
     const userBalance = localStorage.getItem("userBalance");
     const [lands , setMap] = useState([]);
+    const [user , setUser] = useState({
+      username: "",
+      userBalance: "",
+      isSeller: ""
+    });
     const [isDataLoad , setDataLoad] = useState(false);
     const matrix = [];
     
@@ -32,7 +38,24 @@ function Main(){
       getLandsFromDB();
     }
     
+    userDetail(userMail);
 
+    function userDetail(userMail){
+      const params = {
+        username: userMail,
+      }
+      const URL = 'http://localhost:4000/users/user';
+      axios.get(URL , {params: params})
+      .then((res) => {
+        if (res.data){
+          user.userBalance = res.data[0].balance;
+          user.username = res.data[0].username;
+          user.isSeller = res.data[0].isSeller;
+        }else{
+
+        }
+      });
+    }
     useEffect( () => {
       init();
     } , [isDataLoad]);
@@ -76,6 +99,7 @@ function Main(){
             game: "",
             isForSale: false
           });
+
     const [isLandNFT , setLandShow] = useState(false);
 
    async function getLandfromDB(row , col){
@@ -110,12 +134,12 @@ function Main(){
     }else if (land.type === "road"){
       return "road-land";
     }else if (land.type === "NFT"){
-      if (!land.isForSale){
-        return "nftnotsale-land";
+      if (land.ownerId === userMail){
+        return "mynft-land";
       }else if (land.isForSale){
         return "nftsale-land";
-      }else if (land.ownerId === userMail){
-        return "mynft-land";
+      }else if (!land.isForSale){
+        return "nftnotsale-land";
       }
     }
    }
@@ -132,15 +156,40 @@ function Main(){
      
      
    }
+   window.addEventListener("wheel" , zoom , {passive: false});
+   var scale = 1;
+   const el = document.getElementById("root");
+   el.onwheel= zoom;
+
+   function zoom(event) {
+      event.preventDefault();
+
+      scale += event.deltaY * -0.001;
+
+      // Restrict scale
+      scale = Math.min(Math.max(.125, scale), 1.5);
+      if (scale < 1)
+          scale=1;
+      // Apply scale transform
+      
+      el.style.transform = `scale(${scale})`;
+    }
+  //  const wz = mouseWheelZoom({
+  //     element: document.getElementById("root"),
+  //     zoomStep: .25  
+  //   });
+
+    // reset zoom
+    //wz.reset();
 
     return <div>
-        <NavBar userBalance={userBalance} userMail={userMail}/>
-        {isLandNFT ? <Popup land={land} userMail={userMail}/>: ""}
-        <div className="rowOfLands">
+        <NavBar userBalance={user.userBalance} userMail={user.username}/>
+        {isLandNFT ? <Popup land={land} userMail={userMail} isSeller={user.isSeller}/>: ""}
+        <div className="rowOfLands" id="matrix">
            {
-            lands.map( (row , colIndex) => {
-              return <div className="colOfLands" key={`col${colIndex}`}>
-                  {row.map( (element , rowIndex) => {
+            lands.map( (row , rowIndex) => {
+              return <div className="colOfLands" key={`col${rowIndex}`}>
+                  {row.map( (element , colIndex) => {
                       const l = checkLand(element); 
                       //console.log(element);
                       return <div onClick={ () => updateLandRowCol(rowIndex , colIndex)} className={`matrixOfLands land ${l}`} key={`${rowIndex}_${colIndex}`} id={`${rowIndex}_${colIndex}`} > 
